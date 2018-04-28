@@ -82,7 +82,6 @@ static NSOperationQueue *_CSOperationManagerQueue(CSBaseOperationType type) {
                 block(self);
             });
         }
-        // pthread_main_np() ? block() : dispatch_async(dispatch_get_main_queue(), block);
     } else {
         block = self.blockOnCurrentThread;
         !block ?: block(self);

@@ -1,9 +1,9 @@
 //
 //  AppDelegate.m
-//  CSOperation
+//  Example
 //
-//  Created by Joslyn Wu on 2018/4/16.
-//  Copyright © 2018年 joslyn. All rights reserved.
+//  Created by Joslyn Wu on 2018/4/28.
+//  Copyright © 2018年 Joslyn Wu. All rights reserved.
 //
 
 #import "AppDelegate.h"

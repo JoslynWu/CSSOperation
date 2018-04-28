@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
+        <!--CSOperation-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
@@ -37,10 +37,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" id="e4B-hx-gR1">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="EMO-Ya-kCX">
+                    <navigationItem key="navigationItem" title="CSOperation" id="RRJ-2Q-Pco">
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="WuM-Ao-FpI">
                             <connections>
-                                <segue destination="GEv-pr-aBe" kind="show" id="Z3e-Gx-pUC"/>
+                                <segue destination="GEv-pr-aBe" kind="show" id="kiA-Sx-30K"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -49,7 +49,7 @@
             </objects>
             <point key="canvasLocation" x="1030" y="762"/>
         </scene>
-        <!--Next View Controller-->
+        <!--Example-->
         <scene sceneID="KeH-As-xOI">
             <objects>
                 <viewController id="GEv-pr-aBe" customClass="NextViewController" sceneMemberID="viewController">
@@ -59,6 +59,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6IL-9K-whq"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Example" id="N2k-p0-hCt"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVB-R4-Evc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
