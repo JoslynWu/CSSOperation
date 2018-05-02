@@ -1,4 +1,4 @@
-# CSOperation
+# CSSOperation
 NSOperation的一个扩展。便于控制任务（模块）执行顺序和方式。
 
 ### 业务场景
@@ -12,8 +12,8 @@ NSOperation的一个扩展。便于控制任务（模块）执行顺序和方式
 步骤：
 
 1. 讲Sources文件移至自己项目。
-2. 简单使用的时，只需要用于一个`CSBaseOperation`实例，然后按照 demo 使用即可。
-3. 可以继承`CSBaseOperation`实现更模块化的事务。具体可参考原库（下面有链接）。
+2. 简单使用的时，只需要用于一个`CSSBaseOperation`实例，然后按照 demo 使用即可。
+3. 可以继承`CSSBaseOperation`实现更模块化的事务。具体可参考原库（下面有链接）。
 
 
 ### 感谢
