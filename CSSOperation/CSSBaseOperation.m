@@ -1,20 +1,19 @@
 //
 //  BaseOperation.m
-//  CSOperation
+//  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
 //  Copyright © 2018年 joslyn. All rights reserved.
 //
 
-#import "CSBaseOperation.h"
+#import "CSSBaseOperation.h"
 #import <pthread/pthread.h>
 
-CSBaseOperationType const kCSBaseOperationTypeSingleton = @"CSBaseOperationTypeSingleton";
-CSBaseOperationType const kCSBaseOperationTypeSerial = @"CSBaseOperationTypeSerial";
-CSBaseOperationType const kCSBaseOperationTypeConcurrent = @"CSBaseOperationTypeConcurrent";
+CSSBaseOperationType const kCSSBaseOperationTypeSingleton = @"CSSBaseOperationTypeSingleton";
+CSSBaseOperationType const kCSSBaseOperationTypeSerial = @"CSSBaseOperationTypeSerial";
+CSSBaseOperationType const kCSSBaseOperationTypeConcurrent = @"CSSBaseOperationTypeConcurrent";
 
-/** 公共的OperationQueue */
-static NSOperationQueue *_CSOperationManagerQueue(CSBaseOperationType type) {
+static NSOperationQueue *_CSSOperationManagerQueue(CSSBaseOperationType type) {
     static NSMutableDictionary *queues = nil;
     static dispatch_once_t onceToken;
     
@@ -32,21 +31,19 @@ static NSOperationQueue *_CSOperationManagerQueue(CSBaseOperationType type) {
     return queue;
 }
 
-@implementation CSBaseOperation
+@implementation CSSBaseOperation
 
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
 #pragma mark - Template Sub Methods
 + (NSOperationQueue *)_queueForOperation:(NSOperation *)newOperation {
-    if (![newOperation isMemberOfClass:self]) {
-        return nil;
-    }
-    CSBaseOperation *tempOperation = (CSBaseOperation *)newOperation;
-    CSBaseOperationType operationType = tempOperation.operationType ?: kCSBaseOperationTypeConcurrent;
-    NSOperationQueue *queue = _CSOperationManagerQueue(operationType);
     
-    if (operationType == kCSBaseOperationTypeSingleton) {
+    CSSBaseOperation *tempOperation = (CSSBaseOperation *)newOperation;
+    CSSBaseOperationType operationType = tempOperation.operationType ?: kCSSBaseOperationTypeConcurrent;
+    NSOperationQueue *queue = _CSSOperationManagerQueue(operationType);
+    
+    if (operationType == kCSSBaseOperationTypeSingleton) {
         for (NSOperation *operation in [queue operations]) {
             if ([operation isMemberOfClass:self]) {
                 queue = nil;
@@ -54,7 +51,7 @@ static NSOperationQueue *_CSOperationManagerQueue(CSBaseOperationType type) {
             }
         }
     }
-    else if (operationType == kCSBaseOperationTypeSerial) {
+    else if (operationType == kCSSBaseOperationTypeSerial) {
         [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isMemberOfClass:self]) {
                 [tempOperation addDependency:(NSOperation *)obj];
@@ -73,7 +70,7 @@ static NSOperationQueue *_CSOperationManagerQueue(CSBaseOperationType type) {
         return;
     }
     
-    CSBaseOperationBlock block = self.blockOnMainThread;
+    CSSBaseOperationBlock block = self.blockOnMainThread;
     if (block) {
         if (pthread_main_np()) {
             block(self);

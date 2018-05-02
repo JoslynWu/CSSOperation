@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--CSOperation-->
+        <!--CSSOperation-->
         <scene sceneID="tne-QT-ifu">
             <objects>
                 <viewController id="BYZ-38-t0r" customClass="ViewController" sceneMemberID="viewController">
@@ -37,7 +37,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="CSOperation" id="RRJ-2Q-Pco">
+                    <navigationItem key="navigationItem" title="CSSOperation" id="RRJ-2Q-Pco" userLabel="CSSOperation">
                         <barButtonItem key="rightBarButtonItem" title="Next" id="WuM-Ao-FpI">
                             <connections>
                                 <segue destination="GEv-pr-aBe" kind="show" id="kiA-Sx-30K"/>

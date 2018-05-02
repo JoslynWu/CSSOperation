@@ -1,14 +1,14 @@
 //
 //  NextViewController.m
-//  CSOperation
+//  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
 //  Copyright © 2018年 joslyn. All rights reserved.
 //
 
 #import "NextViewController.h"
-#import "CSBaseOperation.h"
-#import "NSOperation+CSOperation.h"
+#import "CSSBaseOperation.h"
+#import "NSOperation+CSSOperation.h"
 
 @interface NextViewController ()
 
@@ -35,10 +35,10 @@
 - (void)alertWithTitle:(NSString *)title message:(NSString *)msg count:(NSInteger)count {
     for (NSInteger i = 0; i < count; i++) {
         UIAlertControllerStyle alertStyle = (i % 2 == 0) ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet;
-        CSBaseOperation *baseOperation = [CSBaseOperation new];
-        baseOperation.operationType = kCSBaseOperationTypeSerial;
+        CSSBaseOperation *baseOperation = [CSSBaseOperation new];
+        baseOperation.operationType = kCSSBaseOperationTypeSerial;
         __weak typeof(self) weakSelf = self;
-        baseOperation.blockOnMainThread = ^(CSBaseOperation *make){
+        baseOperation.blockOnMainThread = ^(CSSBaseOperation *make){
             UIAlertController *alertCtl = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:alertStyle];
             [alertCtl addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
                 make.finished = YES;

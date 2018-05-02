@@ -1,31 +1,31 @@
 //
-//  NSOperation+CSOperationAbstract.m
-//  CSOperation
+//  NSOperation+CSSOperationAbstract.m
+//  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
 //  Copyright © 2018年 joslyn. All rights reserved.
 //
 
-#import "NSOperation+CSOperation.h"
+#import "NSOperation+CSSOperation.h"
 
-static dispatch_queue_t _CSOperationDispatchManagerSerialQueue(void) {
+static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{
-        queue = dispatch_queue_create("com.CSOpationManager.NSOperationManagerSerialQueue", DISPATCH_QUEUE_SERIAL);
+        queue = dispatch_queue_create("com.CSSOpationManager.NSOperationManagerSerialQueue", DISPATCH_QUEUE_SERIAL);
     });
     
     return queue;
 }
 
-@interface NSOperation (_CSOperationManagerTemplate)
+@interface NSOperation (_CSSOperationManagerTemplate)
 
 + (void)_asyncStartOperation:(NSOperation *)newOperation;
 
 @end
 
-@implementation NSOperation (_CSOperationManagerTemplate)
+@implementation NSOperation (_CSSOperationManagerTemplate)
 
 #pragma mark - Template Method
 + (void)_asyncStartOperation:(NSOperation *)newOperation {
@@ -51,7 +51,7 @@ static dispatch_queue_t _CSOperationDispatchManagerSerialQueue(void) {
 
 
 
-@implementation NSOperation (CSOperationStart)
+@implementation NSOperation (CSSOperationStart)
 
 - (void)syncStart {
     [NSOperationQueue syncStartOperations:self, nil];
@@ -85,7 +85,7 @@ static dispatch_queue_t _CSOperationDispatchManagerSerialQueue(void) {
 
 
 
-@implementation NSOperationQueue (CSOperationDispatchManager)
+@implementation NSOperationQueue (CSSOperationDispatchManager)
 
 #pragma mark -Sync
 + (void)syncStartOperations:(NSOperation *)newOperation, ... {
@@ -122,7 +122,7 @@ static dispatch_queue_t _CSOperationDispatchManagerSerialQueue(void) {
         
         va_end(argumentList);
         
-        dispatch_async(_CSOperationDispatchManagerSerialQueue(), ^{
+        dispatch_async(_CSSOperationDispatchManagerSerialQueue(), ^{
             
             for (NSOperation *operation in operations) {
                 [operation.class _asyncStartOperation:operation];

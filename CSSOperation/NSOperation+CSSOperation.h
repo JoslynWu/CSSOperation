@@ -1,6 +1,6 @@
 //
-//  NSOperation+CSOperationAbstract.h
-//  CSOperation
+//  NSOperation+CSSOperationAbstract.h
+//  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
 //  Copyright © 2018年 joslyn. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSOperation (CSOperationStart)
+@interface NSOperation (CSSOperationStart)
 
 - (void)syncStart;
 - (void)asyncStart;
@@ -19,7 +19,7 @@
 
 
 
-@interface NSOperationQueue (CSOperationDispatchManager)
+@interface NSOperationQueue (CSSOperationDispatchManager)
 
 /** 立即执行Operation */
 + (void)syncStartOperations:(NSOperation *)newOperation, ...;
