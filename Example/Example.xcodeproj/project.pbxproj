@@ -15,8 +15,11 @@
 		9E6C33D220946ADF00D169BB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6C33CF20946ADE00D169BB /* ViewController.m */; };
 		9E6C33D320946ADF00D169BB /* NextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6C33D120946ADF00D169BB /* NextViewController.m */; };
 		9E6C33DC20946BED00D169BB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E6C33DB20946BED00D169BB /* Main.storyboard */; };
+		9E7A7604209AF45D008E4A3E /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 9E7A7601209AF45D008E4A3E /* LICENSE */; };
+		9E7A7605209AF45D008E4A3E /* CSSOperation.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 9E7A7602209AF45D008E4A3E /* CSSOperation.podspec */; };
+		9E7A7606209AF45D008E4A3E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 9E7A7603209AF45D008E4A3E /* README.md */; };
 		9E7E2146209A0FE40049ABBF /* NSOperation+CSSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E2142209A0FE40049ABBF /* NSOperation+CSSOperation.m */; };
-		9E7E2147209A0FE40049ABBF /* CSSBaseOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E2145209A0FE40049ABBF /* CSSBaseOperation.m */; };
+		9E7E2147209A0FE40049ABBF /* CSSOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E7E2145209A0FE40049ABBF /* CSSOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,10 +48,13 @@
 		9E6C33D020946ADE00D169BB /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		9E6C33D120946ADF00D169BB /* NextViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NextViewController.m; sourceTree = "<group>"; };
 		9E6C33DB20946BED00D169BB /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		9E7A7601209AF45D008E4A3E /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		9E7A7602209AF45D008E4A3E /* CSSOperation.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = CSSOperation.podspec; path = ../CSSOperation.podspec; sourceTree = "<group>"; };
+		9E7A7603209AF45D008E4A3E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		9E7E2142209A0FE40049ABBF /* NSOperation+CSSOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOperation+CSSOperation.m"; sourceTree = "<group>"; };
-		9E7E2143209A0FE40049ABBF /* CSSBaseOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSBaseOperation.h; sourceTree = "<group>"; };
+		9E7E2143209A0FE40049ABBF /* CSSOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSOperation.h; sourceTree = "<group>"; };
 		9E7E2144209A0FE40049ABBF /* NSOperation+CSSOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOperation+CSSOperation.h"; sourceTree = "<group>"; };
-		9E7E2145209A0FE40049ABBF /* CSSBaseOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSBaseOperation.m; sourceTree = "<group>"; };
+		9E7E2145209A0FE40049ABBF /* CSSOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CSSOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +82,9 @@
 				9E6C33A920946A8700D169BB /* Example */,
 				9E6C33C220946A8B00D169BB /* ExampleTests */,
 				9E6C33A820946A8700D169BB /* Products */,
+				9E7A7602209AF45D008E4A3E /* CSSOperation.podspec */,
+				9E7A7601209AF45D008E4A3E /* LICENSE */,
+				9E7A7603209AF45D008E4A3E /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -120,8 +129,8 @@
 			children = (
 				9E7E2144209A0FE40049ABBF /* NSOperation+CSSOperation.h */,
 				9E7E2142209A0FE40049ABBF /* NSOperation+CSSOperation.m */,
-				9E7E2143209A0FE40049ABBF /* CSSBaseOperation.h */,
-				9E7E2145209A0FE40049ABBF /* CSSBaseOperation.m */,
+				9E7E2143209A0FE40049ABBF /* CSSOperation.h */,
+				9E7E2145209A0FE40049ABBF /* CSSOperation.m */,
 			);
 			name = CSSOperation;
 			path = ../CSSOperation;
@@ -208,8 +217,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E7A7606209AF45D008E4A3E /* README.md in Resources */,
 				9E6C33DC20946BED00D169BB /* Main.storyboard in Resources */,
 				9E6C33B720946A8A00D169BB /* LaunchScreen.storyboard in Resources */,
+				9E7A7605209AF45D008E4A3E /* CSSOperation.podspec in Resources */,
+				9E7A7604209AF45D008E4A3E /* LICENSE in Resources */,
 				9E6C33B420946A8A00D169BB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -232,7 +244,7 @@
 				9E7E2146209A0FE40049ABBF /* NSOperation+CSSOperation.m in Sources */,
 				9E6C33D320946ADF00D169BB /* NextViewController.m in Sources */,
 				9E6C33BA20946A8A00D169BB /* main.m in Sources */,
-				9E7E2147209A0FE40049ABBF /* CSSBaseOperation.m in Sources */,
+				9E7E2147209A0FE40049ABBF /* CSSOperation.m in Sources */,
 				9E6C33AC20946A8700D169BB /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

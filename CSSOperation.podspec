@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "CSSOperation"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "NSOperation的一个扩展。便于控制任务（模块）执行顺序和方式。"
   s.license      = { :type => 'MIT License', :file => 'LICENSE' }
   s.authors      = { 'Joslyn' => 'cs_joslyn@foxmail.com' }

@@ -1,5 +1,5 @@
 //
-//  NSOperation+CSSOperationAbstract.m
+//  NSOperation+CSSOperation.m
 //  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
@@ -19,6 +19,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     return queue;
 }
 
+#pragma mark - ********************* NSOperationQueue+_CSSOperationManagerTemplate *********************
 @interface NSOperation (_CSSOperationManagerTemplate)
 
 + (void)_asyncStartOperation:(NSOperation *)newOperation;
@@ -36,13 +37,10 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     }
 }
 
-#pragma mark - Template Sub Methods
-#pragma mark -自行处理Operation
 + (BOOL)_operationDidHandle:(NSOperation *)newOperation {
     return NO;
 }
 
-#pragma mark -当前OperationQueue
 + (NSOperationQueue *)_queueForOperation:(NSOperation *)newOperation {
     return nil;
 }
@@ -50,7 +48,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
 @end
 
 
-
+#pragma mark - ********************* NSOperationQueue+CSSOperationStart *********************
 @implementation NSOperation (CSSOperationStart)
 
 - (void)syncStart {
@@ -61,7 +59,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     [NSOperationQueue asyncStartOperations:self, nil];
 }
 
-- (void)startAfterOperations:(NSOperation *)newOperation, ... {
+- (void)dependencyOperations:(NSOperation *)newOperation, ... {
     NSMutableArray *operations = [NSMutableArray array];
     [operations addObject:newOperation];
     
@@ -84,7 +82,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
 @end
 
 
-
+#pragma mark - ********************* NSOperationQueue+CSSOperationDispatchManager *********************
 @implementation NSOperationQueue (CSSOperationDispatchManager)
 
 #pragma mark -Sync
