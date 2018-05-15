@@ -127,10 +127,10 @@
 		9E7E2141209A0FE40049ABBF /* CSSOperation */ = {
 			isa = PBXGroup;
 			children = (
-				9E7E2144209A0FE40049ABBF /* NSOperation+CSSOperation.h */,
-				9E7E2142209A0FE40049ABBF /* NSOperation+CSSOperation.m */,
 				9E7E2143209A0FE40049ABBF /* CSSOperation.h */,
 				9E7E2145209A0FE40049ABBF /* CSSOperation.m */,
+				9E7E2144209A0FE40049ABBF /* NSOperation+CSSOperation.h */,
+				9E7E2142209A0FE40049ABBF /* NSOperation+CSSOperation.m */,
 			);
 			name = CSSOperation;
 			path = ../CSSOperation;

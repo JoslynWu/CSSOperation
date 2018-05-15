@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#pragma mark - ********************* NSOperationQueue+CSSOperationStart *********************
+#pragma mark - NSOperationQueue+CSSOperationStart
 @interface NSOperation (CSSOperationStart)
 
 /** 立即执行 */
@@ -21,25 +21,25 @@
 - (void)asyncStart;
 
 /** 当前操作依赖其它操作 */
-- (void)dependencyOperations:(NSOperation *)newOperation, ...;
+- (void)dependencyOperations:(__kindof NSOperation *)newOperation, ...;
 
 @end
 
 
-#pragma mark - ********************* NSOperationQueue+CSSOperationDispatchManager *********************
+#pragma mark - NSOperationQueue+CSSOperationDispatchManager
 @interface NSOperationQueue (CSSOperationDispatchManager)
 
 /**
  立即执行Operation
  - 不加入队列，直接执行
  */
-+ (void)syncStartOperations:(NSOperation *)newOperation, ...;
++ (void)syncStartOperations:(__kindof NSOperation *)newOperation, ...;
 
 /**
  异步执行Operation
  - 队列类型由操作具体指定（CSSOperation的operationType）
  */
-+ (void)asyncStartOperations:(NSOperation *)newOperation, ...;
++ (void)asyncStartOperations:(__kindof NSOperation *)newOperation, ...;
 
 @end
 
