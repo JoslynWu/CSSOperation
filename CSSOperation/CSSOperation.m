@@ -51,7 +51,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 }
 
 #pragma mark - Template Sub Methods
-+ (NSOperationQueue *)_queueForOperation:(NSOperation *)newOperation {
++ (NSOperationQueue *)_queueForOperation:(__kindof NSOperation *)newOperation {
     
     CSSOperation *tempOperation = (CSSOperation *)newOperation;
     CSSOperationType operationType = tempOperation.operationType ?: kCSSOperationTypeConcurrent;
