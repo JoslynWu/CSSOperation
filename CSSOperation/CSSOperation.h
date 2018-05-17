@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithOperationType:(CSSOperationType)type NS_DESIGNATED_INITIALIZER;
 
 /** 便捷构造器 */
-- (instancetype)operationWityType:(CSSOperationType)type;
++ (instancetype)operationWithType:(CSSOperationType)type;
 
 /** 操作是否在执行中 */
 @property (assign, nonatomic, getter=isExecuting) BOOL executing;

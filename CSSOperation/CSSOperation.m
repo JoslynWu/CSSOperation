@@ -41,8 +41,8 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return [self initWithOperationType:kCSSOperationTypeConcurrent];
 }
 
-- (instancetype)operationWityType:(CSSOperationType)type {
-    return [self initWithOperationType:kCSSOperationTypeConcurrent];
++ (instancetype)operationWithType:(CSSOperationType)type {
+    return [[self alloc] initWithOperationType:type];
 }
 
 - (instancetype)initWithOperationType:(CSSOperationType)type {

@@ -35,7 +35,7 @@
 - (void)alertWithTitle:(NSString *)title message:(NSString *)msg count:(NSInteger)count {
     for (NSInteger i = 0; i < count; i++) {
         UIAlertControllerStyle alertStyle = (i % 2 == 0) ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet;
-        CSSOperation *operation = [[CSSOperation alloc] initWithOperationType:kCSSOperationTypeSerial];
+        CSSOperation *operation = [CSSOperation operationWithType:kCSSOperationTypeSerial];
         __weak typeof(self) weakSelf = self;
         operation.blockOnMainThread = ^(CSSOperation *make){
             UIAlertController *alertCtl = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:alertStyle];
