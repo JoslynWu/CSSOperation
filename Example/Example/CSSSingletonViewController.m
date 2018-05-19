@@ -1,20 +1,19 @@
 //
-//  NextViewController.m
-//  CSSOperation
+//  CSSSingletonViewController.m
+//  Example
 //
-//  Created by Joslyn Wu on 2018/4/17.
-//  Copyright © 2018年 joslyn. All rights reserved.
+//  Created by Joslyn Wu on 2018/5/19.
+//  Copyright © 2018年 Joslyn Wu. All rights reserved.
 //
 
-#import "NextViewController.h"
+#import "CSSSingletonViewController.h"
 #import "CSSOperation.h"
-#import "NSOperation+CSSOperation.h"
 
-@interface NextViewController ()
+@interface CSSSingletonViewController ()
 
 @end
 
-@implementation NextViewController
+@implementation CSSSingletonViewController
 
 - (void)dealloc {
     NSLog(@"--->%s",__func__);
@@ -28,14 +27,14 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-
+    
     [self alertWithTitle:@"Did Appear" message:@"message" count:2];
 }
 
 - (void)alertWithTitle:(NSString *)title message:(NSString *)msg count:(NSInteger)count {
     for (NSInteger i = 0; i < count; i++) {
         UIAlertControllerStyle alertStyle = (i % 2 == 0) ? UIAlertControllerStyleAlert : UIAlertControllerStyleActionSheet;
-        CSSOperation *operation = [CSSOperation operationWithType:kCSSOperationTypeSerial];
+        CSSOperation *operation = [CSSOperation operationWithType:kCSSOperationTypeSingleton];
         __weak typeof(self) weakSelf = self;
         operation.blockOnMainThread = ^(CSSOperation *make){
             UIAlertController *alertCtl = [UIAlertController alertControllerWithTitle:title message:msg preferredStyle:alertStyle];
@@ -48,15 +47,5 @@
         [operation asyncStart];
     }
 }
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 @end

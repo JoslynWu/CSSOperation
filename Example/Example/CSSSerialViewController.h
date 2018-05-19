@@ -1,5 +1,5 @@
 //
-//  NextViewController.h
+//  CSSSerialViewController.h
 //  CSSOperation
 //
 //  Created by Joslyn Wu on 2018/4/17.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface NextViewController : UIViewController
+@interface CSSSerialViewController : UIViewController
 
 @end

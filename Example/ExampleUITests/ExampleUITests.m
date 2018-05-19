@@ -32,17 +32,32 @@
     [super tearDown];
 }
 
-- (void)testExample {
+- (void)testSingleton {
     
     XCUIApplication *app = [[XCUIApplication alloc] init];
-    [app.navigationBars[@"CSSOperation"].buttons[@"Next"] tap];
+    [app.buttons[@"伪单例队列"] tap];
+    [app.alerts[@"Did Load"].buttons[@"取消"] tap];
+    [[[XCUIApplication alloc] init].navigationBars[@"Singleton"].buttons[@"CSSOperation"] tap];
+}
+
+- (void)testSerial {
+    
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [[[XCUIApplication alloc] init].buttons[@"串行队列"] tap];
     [app.alerts[@"Did Load"].buttons[@"取消"] tap];
     [app.sheets[@"Did Load"].buttons[@"取消"] tap];
     [app.alerts[@"Did Appear"].buttons[@"取消"] tap];
     [app.sheets[@"Did Appear"].buttons[@"取消"] tap];
-    [app.navigationBars[@"Example"].buttons[@"CSSOperation"] tap];
-    // Use recording to get started writing UI tests.
-    // Use XCTAssert and related functions to verify your tests produce the correct results.
+    [app.navigationBars[@"Serial"].buttons[@"CSSOperation"] tap];
+}
+
+- (void)testConcurrent {
+    
+    XCUIApplication *app = [[XCUIApplication alloc] init];
+    [app.buttons[@"并发队列"] tap];
+    sleep(2.0);
+    [app.navigationBars[@"Concurrent"].buttons[@"CSSOperation"] tap];
+    
 }
 
 @end

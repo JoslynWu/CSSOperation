@@ -39,6 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 操作是否执行完成。（当前操作完成的标记，应该在合适的时候改变其状态） */
 @property (assign, nonatomic, getter=isFinished) BOOL finished;
 
+/** 操作是否准备就绪 */
+@property (assign, nonatomic, getter=isReady) BOOL ready;
+
 /**
  操作队列类型
  - kCSSOperationTypeSingleton 单例队列（伪单例）。第一操作会被执行，随后操作被取消。

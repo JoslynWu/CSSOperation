@@ -19,51 +19,145 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m8Z-sa-6bq">
-                                <rect key="frame" x="15" y="269.5" width="345" height="128"/>
+                                <rect key="frame" x="15" y="270" width="345" height="128"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="128" id="4Ge-Fc-jgR"/>
                                 </constraints>
-                                <string key="text">业务场景：有多个消息弹框或者活动弹框的时候，我们希望用户能够依次看到。你可以点击右上角 Next 进入到下一页，查看效果。      （核心代码来自Delpan，该仓库只做了简单修改，便于轻量应用。更多扩展请参看IOSDelpan/OperationAbstract）</string>
+                                <string key="text">      业务场景：有多个消息弹框或者活动弹框的时候，我们希望用户能够依次看到。你可以点击右上角 "串行队列" 进入到下一页，查看效果。 
+                     
+      该仓库基于Delpan的OperationAbstract，更多扩展请参看IOSDelpan/OperationAbstract。</string>
                                 <fontDescription key="fontDescription" name=".PingFangSC-Regular" family=".PingFang SC" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dP3-b6-Ai5">
+                                <rect key="frame" x="0.0" y="588" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.13725490200000001" green="0.73725490199999999" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="vAQ-5h-lWU"/>
+                                </constraints>
+                                <state key="normal" title="并发队列">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="h7m-pH-LCh" kind="show" id="ykZ-I1-4XG"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lsa-zH-IzO">
+                                <rect key="frame" x="0.0" y="529" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.13725490200000001" green="0.73725490199999999" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="A9d-mR-snj"/>
+                                </constraints>
+                                <state key="normal" title="串行队列">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="GEv-pr-aBe" kind="show" id="SRp-du-WBH"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ae8-dw-033">
+                                <rect key="frame" x="0.0" y="470" width="375" height="44"/>
+                                <color key="backgroundColor" red="0.13725490200000001" green="0.73725490199999999" blue="0.72549019609999998" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="ZjL-7l-bke"/>
+                                </constraints>
+                                <state key="normal" title="伪单例队列">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <segue destination="8Fu-0M-of7" kind="show" id="iuD-KZ-hUb"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="Ae8-dw-033" firstAttribute="trailing" secondItem="dP3-b6-Ai5" secondAttribute="trailing" id="ELt-Rh-VaU"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dP3-b6-Ai5" secondAttribute="bottom" constant="35" id="JVH-9g-e4X"/>
+                            <constraint firstItem="dP3-b6-Ai5" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="KgV-ct-bHA"/>
+                            <constraint firstItem="dP3-b6-Ai5" firstAttribute="top" secondItem="lsa-zH-IzO" secondAttribute="bottom" constant="15" id="L7n-Qu-kke"/>
+                            <constraint firstItem="Ae8-dw-033" firstAttribute="leading" secondItem="lsa-zH-IzO" secondAttribute="leading" id="Wc5-9S-TC8"/>
+                            <constraint firstItem="lsa-zH-IzO" firstAttribute="top" secondItem="Ae8-dw-033" secondAttribute="bottom" constant="15" id="XMf-NS-S8W"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dP3-b6-Ai5" secondAttribute="trailing" id="YO4-Es-ucL"/>
                             <constraint firstItem="m8Z-sa-6bq" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aLI-KK-Hqp"/>
                             <constraint firstItem="m8Z-sa-6bq" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="15" id="dEr-KM-0J6"/>
+                            <constraint firstItem="Ae8-dw-033" firstAttribute="trailing" secondItem="lsa-zH-IzO" secondAttribute="trailing" id="f8s-QO-WRW"/>
                             <constraint firstItem="m8Z-sa-6bq" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hq0-wg-FOw"/>
+                            <constraint firstItem="Ae8-dw-033" firstAttribute="leading" secondItem="dP3-b6-Ai5" secondAttribute="leading" id="k7R-d1-UB4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="CSSOperation" id="RRJ-2Q-Pco" userLabel="CSSOperation">
-                        <barButtonItem key="rightBarButtonItem" title="Next" id="WuM-Ao-FpI">
-                            <connections>
-                                <segue destination="GEv-pr-aBe" kind="show" id="kiA-Sx-30K"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="CSSOperation" id="RRJ-2Q-Pco" userLabel="CSSOperation"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1030" y="762"/>
         </scene>
-        <!--Example-->
+        <!--Serial-->
         <scene sceneID="KeH-As-xOI">
             <objects>
-                <viewController id="GEv-pr-aBe" customClass="NextViewController" sceneMemberID="viewController">
+                <viewController id="GEv-pr-aBe" customClass="CSSSerialViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9ow-zv-Yjl">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="6IL-9K-whq"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Example" id="N2k-p0-hCt"/>
+                    <navigationItem key="navigationItem" title="Serial" id="N2k-p0-hCt"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HVB-R4-Evc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1793" y="761"/>
+            <point key="canvasLocation" x="2129" y="745"/>
+        </scene>
+        <!--Concurrent-->
+        <scene sceneID="xCn-YL-g1o">
+            <objects>
+                <viewController id="h7m-pH-LCh" customClass="CSSConcurrentViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="pUO-8j-Xu8">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="log" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zPL-6p-Z9b">
+                                <rect key="frame" x="8" y="144" width="359" height="473"/>
+                                <color key="backgroundColor" red="0.80392158030000005" green="0.80392158030000005" blue="0.80392158030000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" name=".PingFangSC-Regular" family=".PingFang SC" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="iMH-ws-QJr" firstAttribute="trailing" secondItem="zPL-6p-Z9b" secondAttribute="trailing" constant="8" id="7EO-Zn-xt0"/>
+                            <constraint firstItem="zPL-6p-Z9b" firstAttribute="leading" secondItem="iMH-ws-QJr" secondAttribute="leading" constant="8" id="Yg5-Ny-cgs"/>
+                            <constraint firstItem="zPL-6p-Z9b" firstAttribute="top" secondItem="iMH-ws-QJr" secondAttribute="top" constant="80" id="lQ5-N4-7Hd"/>
+                            <constraint firstItem="iMH-ws-QJr" firstAttribute="bottom" secondItem="zPL-6p-Z9b" secondAttribute="bottom" constant="50" id="oJz-fO-P6Y"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="iMH-ws-QJr"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Concurrent" id="fh6-cl-Pg8"/>
+                    <connections>
+                        <outlet property="logLab" destination="zPL-6p-Z9b" id="2FU-h4-ptC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="woT-8z-Bkb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2129" y="1476"/>
+        </scene>
+        <!--Singleton-->
+        <scene sceneID="V52-yf-fKD">
+            <objects>
+                <viewController id="8Fu-0M-of7" customClass="CSSSingletonViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="sVk-9O-x9Q">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="Vqv-Q1-QS1"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Singleton" id="Oqf-SX-HFo"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zS7-Qq-jwk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2129" y="34"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="CFD-ij-d1y">

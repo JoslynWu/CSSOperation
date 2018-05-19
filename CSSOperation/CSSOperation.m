@@ -7,7 +7,6 @@
 //
 
 #import "CSSOperation.h"
-#import <pthread/pthread.h>
 
 CSSOperationType const kCSSOperationTypeSingleton = @"CSSOperationTypeSingleton";
 CSSOperationType const kCSSOperationTypeSerial = @"CSSOperationTypeSerial";
@@ -35,6 +34,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 @synthesize executing = _executing;
 @synthesize finished = _finished;
+@synthesize ready = _ready;
 
 #pragma mark - lifecycle
 - (instancetype)init {
@@ -68,6 +68,10 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         queue = _CSSOperationManagerGlobalQueue(operationType);
     }
     
+    if (queue.operations.count <= 0) {
+        tempOperation.ready = YES;
+    }
+    
     if (operationType == kCSSOperationTypeSingleton) {
         for (NSOperation *operation in [queue operations]) {
             if ([operation isMemberOfClass:self]) {
@@ -75,13 +79,21 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
                 break;
             }
         }
+        
     } else if (operationType == kCSSOperationTypeSerial) {
-        [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj isMemberOfClass:self]) {
-                [tempOperation addDependency:(NSOperation *)obj];
+        [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([op isMemberOfClass:self]) {
+                dispatch_block_t userCompletionBlcok = op.completionBlock ?: nil;
+                op.completionBlock = ^{
+                    !userCompletionBlcok ?: userCompletionBlcok();
+                    tempOperation.ready = YES;
+                };
+                // [tempOperation addDependency:(NSOperation *)op];
                 *stop = YES;
             }
         }];
+    } else if (operationType == kCSSOperationTypeConcurrent) {
+        tempOperation.ready = YES;
     }
     
     return queue;
@@ -89,16 +101,14 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 #pragma mark - Pubilc Methods
 - (void)start {
-    self.executing = YES;
     if ([self isCancelled]) {
-        self.executing = NO;
         self.finished = YES;
         return;
     }
     
     CSSOperationBlock block = self.blockOnMainThread;
     if (block) {
-        if (pthread_main_np()) {
+        if ([NSThread currentThread].isMainThread) {
             block(self);
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -128,6 +138,12 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     [self willChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
     _executing = executing;
     [self didChangeValueForKey:NSStringFromSelector(@selector(isExecuting))];
+}
+
+- (void)setReady:(BOOL)ready {
+    [self willChangeValueForKey:NSStringFromSelector(@selector(isReady))];
+    _ready = ready;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(isReady))];
 }
 
 @end
