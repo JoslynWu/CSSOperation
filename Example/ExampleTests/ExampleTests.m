@@ -32,17 +32,21 @@
     NSString *insideFlag = @"insideFlag";
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     NSBlockOperation *outOp = [NSBlockOperation blockOperationWithBlock:^{
-        NSLog(@"--outoutout-->%@,%@", @"outOp", [NSThread currentThread]);
-        [mArr addObject:outsideFlag];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            CSS_POST_NOTIF;
-        });
+        // NSLog(@"--outoutout-->%@,%@", @"outOp", [NSThread currentThread]);
+        @synchronized(outsideFlag) {
+            [mArr addObject:outsideFlag];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CSS_POST_NOTIF
+            });
+        }
     }];
     
-    for (NSInteger i = 0; i < 100; i++) {
+    for (NSInteger i = 0; i < 999; i++) {
         NSBlockOperation *op = [NSBlockOperation blockOperationWithBlock:^{
-            NSLog(@"--in-->%ld,%@", i, [NSThread currentThread]);
-            [mArr addObject:insideFlag];
+            // NSLog(@"--in-->%ld,%@", i, [NSThread currentThread]);
+            @synchronized(insideFlag) {
+                [mArr addObject:insideFlag];
+            }
         }];
         [outOp addDependency:op];
         [queue addOperation:op];
@@ -55,23 +59,27 @@
 
 - (void)testCSSOperation {
     NSMutableArray<NSString *> *mArr = [NSMutableArray array];
+    NSInteger opCount = 999;
     NSString *outsideFlag = @"outsideFlag";
     NSString *insideFlag = @"insideFlag";
     CSSOperation *outOp = [CSSOperation new];
     outOp.blockOnCurrentThread = ^(__kindof CSSOperation *maker) {
-        NSLog(@"--outoutout-->%@,%@", @"outOp", [NSThread currentThread]);
-        [mArr addObject:outsideFlag];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            CSS_POST_NOTIF;
+        @synchronized(outsideFlag) {
+            [mArr addObject:outsideFlag];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            CSS_POST_NOTIF
+            maker.finished = YES;
         });
     };
     
-    for (NSInteger i = 0; i < 100; i++) {
+    for (NSInteger i = 0; i < opCount; i++) {
         CSSOperation *op = [CSSOperation new];
         op.blockOnCurrentThread = ^(__kindof CSSOperation *maker) {
-            sleep(1);
-            NSLog(@"--in-->%ld,%@", i, [NSThread currentThread]);
-            [mArr addObject:insideFlag];
+            @synchronized(insideFlag) {
+                [mArr addObject:insideFlag];
+                maker.finished = YES;
+            }
         };
         [outOp addDependency:op];
         [op asyncStart];
@@ -79,6 +87,7 @@
     [outOp asyncStart];
     
     CSS_WAIT
+    XCTAssertTrue(mArr.count == opCount + 1);
     XCTAssertTrue([mArr.lastObject isEqualToString:outsideFlag]);
 }
 

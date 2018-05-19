@@ -30,6 +30,12 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return queue;
 }
 
+@interface CSSOperation()
+
+@property (nonatomic, strong) NSHashTable<__kindof NSOperation *> *dependencyTable;
+
+@end
+
 @implementation CSSOperation
 
 @synthesize executing = _executing;
@@ -51,6 +57,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         return nil;
     }
     _operationType = type;
+    _dependencyTable = [NSHashTable weakObjectsHashTable];
     return self;
 }
 
@@ -83,23 +90,20 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     } else if (operationType == kCSSOperationTypeSerial) {
         [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([op isMemberOfClass:self]) {
-                dispatch_block_t userCompletionBlcok = op.completionBlock ?: nil;
-                op.completionBlock = ^{
-                    !userCompletionBlcok ?: userCompletionBlcok();
-                    tempOperation.ready = YES;
-                };
-                // [tempOperation addDependency:(NSOperation *)op];
+                 [tempOperation addDependency:op];
                 *stop = YES;
             }
         }];
     } else if (operationType == kCSSOperationTypeConcurrent) {
-        tempOperation.ready = YES;
+        if (tempOperation.dependencyTable.count <= 0) {
+            tempOperation.ready = YES;
+        }
     }
     
     return queue;
 }
 
-#pragma mark - Pubilc Methods
+#pragma mark - super methods
 - (void)start {
     if ([self isCancelled]) {
         self.finished = YES;
@@ -125,6 +129,33 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     [super cancel];
     self.executing = NO;
     self.finished = YES;
+}
+
+- (void)addDependency:(__kindof NSOperation *)op {
+    if (![op isKindOfClass:[self class]]) {
+        [super addDependency:op];
+        return;
+    }
+    self.ready = NO;
+    @synchronized(self.dependencyTable) {
+        [self.dependencyTable addObject:op];
+    }
+    dispatch_block_t userCompletionBlcok = op.completionBlock ?: nil;
+    __weak typeof(self) weakSelf = self;
+    __weak typeof(op) weakOp = op;
+    op.completionBlock = ^{
+        !userCompletionBlcok ?: userCompletionBlcok();
+        @synchronized(weakSelf.dependencyTable) {
+            [weakSelf.dependencyTable removeObject:weakOp];
+            if (weakSelf.dependencyTable.count <= 0) {
+                weakSelf.ready = YES;
+            }
+        }
+    };
+}
+
+- (void)removeDependency:(__kindof NSOperation *)op {
+    [super removeDependency:op];
 }
 
 #pragma mark - Set
