@@ -33,6 +33,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 @interface CSSOperation()
 
 @property (nonatomic, strong) NSHashTable<__kindof NSOperation *> *dependencyTable;
+@property (nonatomic, copy) dispatch_block_t userCompletionHandle;
 
 @end
 
@@ -44,42 +45,42 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 #pragma mark - lifecycle
 - (instancetype)init {
-    return [self initWithOperationType:kCSSOperationTypeConcurrent];
+    return [self initWithOperationType:kCSSOperationTypeConcurrent queue:nil];
 }
 
 + (instancetype)operationWithType:(CSSOperationType)type {
-    return [[self alloc] initWithOperationType:type];
+    return [[self alloc] initWithOperationType:type queue:nil];
 }
 
-- (instancetype)initWithOperationType:(CSSOperationType)type {
++ (instancetype)operationWithType:(CSSOperationType)type
+                            queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
+    return [[self alloc] initWithOperationType:type queue:queues];
+}
+
+- (instancetype)initWithOperationType:(CSSOperationType)type queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
     self = [super init];
     if (!self) {
         return nil;
     }
     _operationType = type;
-    _dependencyTable = [NSHashTable weakObjectsHashTable];
+    _queues = queues;
     return self;
 }
 
 #pragma mark - Template Sub Methods
-+ (NSOperationQueue *)_queueForOperation:(__kindof NSOperation *)newOperation {
++ (NSOperationQueue *)_queueForOperation:(__kindof CSSOperation *)newOperation {
     
-    CSSOperation *tempOperation = (CSSOperation *)newOperation;
-    CSSOperationType operationType = tempOperation.operationType ?: kCSSOperationTypeConcurrent;
-    NSOperationQueue *queue = nil;
-    if (tempOperation.queues.count &&
-        [tempOperation.queues.allKeys containsObject:operationType] &&
-        [tempOperation.queues[operationType] isKindOfClass:[NSOperationQueue class]]){
-        queue = tempOperation.queues[operationType];
-    } else {
-        queue = _CSSOperationManagerGlobalQueue(operationType);
+    CSSOperationType type = newOperation.operationType;
+    if (type.length <= 0) {
+        return nil;
     }
     
+    NSOperationQueue *queue = newOperation.currentQueue;
     if (queue.operations.count <= 0) {
-        tempOperation.ready = YES;
+        newOperation.ready = YES;
     }
     
-    if (operationType == kCSSOperationTypeSingleton) {
+    if (type == kCSSOperationTypeSingleton) {
         for (NSOperation *operation in [queue operations]) {
             if ([operation isMemberOfClass:self]) {
                 queue = nil;
@@ -87,16 +88,16 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
             }
         }
         
-    } else if (operationType == kCSSOperationTypeSerial) {
+    } else if (type == kCSSOperationTypeSerial) {
         [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([op isMemberOfClass:self]) {
-                 [tempOperation addDependency:op];
+                [newOperation addDependency:op];
                 *stop = YES;
             }
         }];
-    } else if (operationType == kCSSOperationTypeConcurrent) {
-        if (tempOperation.dependencyTable.count <= 0) {
-            tempOperation.ready = YES;
+    } else if (type == kCSSOperationTypeConcurrent) {
+        if (newOperation.dependencyTable.count <= 0) {
+            newOperation.ready = YES;
         }
     }
     
@@ -127,6 +128,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 - (void)cancel {
     [super cancel];
+    self.ready = YES;
     self.executing = NO;
     self.finished = YES;
 }
@@ -136,26 +138,46 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         [super addDependency:op];
         return;
     }
-    self.ready = NO;
+    
     @synchronized(self.dependencyTable) {
+        self.ready = NO;
         [self.dependencyTable addObject:op];
     }
     dispatch_block_t userCompletionBlcok = op.completionBlock ?: nil;
+    ((CSSOperation *)op).userCompletionHandle = userCompletionBlcok;
     __weak typeof(self) weakSelf = self;
     __weak typeof(op) weakOp = op;
     op.completionBlock = ^{
         !userCompletionBlcok ?: userCompletionBlcok();
-        @synchronized(weakSelf.dependencyTable) {
-            [weakSelf.dependencyTable removeObject:weakOp];
-            if (weakSelf.dependencyTable.count <= 0) {
-                weakSelf.ready = YES;
-            }
-        }
+        [weakSelf removeDependency:weakOp];
     };
 }
 
 - (void)removeDependency:(__kindof NSOperation *)op {
-    [super removeDependency:op];
+    if (![op isKindOfClass:[self class]]) {
+        [super removeDependency:op];
+        return;
+    }
+    
+    op.completionBlock = ((CSSOperation *)op).userCompletionHandle;
+    @synchronized(self.dependencyTable) {
+        if ([self.dependencyTable containsObject:op]) {
+            [self.dependencyTable removeObject:op];
+        }
+        if (self.dependencyTable.count <= 0) {
+            if (!self.ready) {
+                self.ready = YES;
+            }
+        }
+    }
+}
+
+#pragma mark - Get
+- (NSHashTable<NSOperation *> *)dependencyTable {
+    if (!_dependencyTable) {
+        _dependencyTable = [NSHashTable weakObjectsHashTable];
+    }
+    return _dependencyTable;
 }
 
 #pragma mark - Set
@@ -175,6 +197,18 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     [self willChangeValueForKey:NSStringFromSelector(@selector(isReady))];
     _ready = ready;
     [self didChangeValueForKey:NSStringFromSelector(@selector(isReady))];
+}
+
+#pragma mark - ********************* public *********************
+- (__kindof NSOperationQueue *)currentQueue {
+    CSSOperationType type = self.operationType;
+    
+    if (self.queues.count && [self.queues.allKeys containsObject:type] &&
+        [self.queues[type] isKindOfClass:[NSOperationQueue class]]){
+        return self.queues[type];
+    }
+    
+    return _CSSOperationManagerGlobalQueue(type);;
 }
 
 @end

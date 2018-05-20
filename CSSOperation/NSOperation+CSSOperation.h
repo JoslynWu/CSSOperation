@@ -22,7 +22,10 @@
  */
 - (void)asyncStart;
 
-/** 当前操作依赖其它操作 */
+/**
+ 当前操作依赖其它操作.
+ - 需要在start之前添加依赖
+ */
 - (void)addDependencyOperations:(__kindof NSOperation *)newOperation, ...;
 - (void)addDependencyArray:(NSArray<__kindof NSOperation *> *)operations;
 
