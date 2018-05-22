@@ -12,6 +12,8 @@ CSSOperationType const kCSSOperationTypeSingleton = @"CSSOperationTypeSingleton"
 CSSOperationType const kCSSOperationTypeSerial = @"CSSOperationTypeSerial";
 CSSOperationType const kCSSOperationTypeConcurrent = @"CSSOperationTypeConcurrent";
 
+static void *kCSSOperationFinishContext = &kCSSOperationFinishContext;
+
 static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) {
     static NSMutableDictionary *globalQueues = nil;
     static dispatch_once_t onceToken;
@@ -67,7 +69,17 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return self;
 }
 
-#pragma mark - Template Sub Methods
+#pragma mark - private
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (context == kCSSOperationFinishContext &&
+        [keyPath isEqualToString:NSStringFromSelector(@selector(isFinished))] &&
+        [object isKindOfClass:[self class]]) {
+        if ([change[NSKeyValueChangeNewKey] boolValue] && ![change[NSKeyValueChangeOldKey] boolValue]) {
+            [self removeDependency:(NSOperation *)object];
+        }
+    }
+}
+
 + (NSOperationQueue *)_queueForOperation:(__kindof CSSOperation *)newOperation {
     
     CSSOperationType type = newOperation.operationType;
@@ -143,14 +155,10 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         self.ready = NO;
         [self.dependencyTable addObject:op];
     }
-    dispatch_block_t userCompletionBlcok = op.completionBlock ?: nil;
-    ((CSSOperation *)op).userCompletionHandle = userCompletionBlcok;
-    __weak typeof(self) weakSelf = self;
-    __weak typeof(op) weakOp = op;
-    op.completionBlock = ^{
-        !userCompletionBlcok ?: userCompletionBlcok();
-        [weakSelf removeDependency:weakOp];
-    };
+    [op addObserver:self
+         forKeyPath:NSStringFromSelector(@selector(isFinished))
+            options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew
+            context:kCSSOperationFinishContext];
 }
 
 - (void)removeDependency:(__kindof NSOperation *)op {
@@ -159,7 +167,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         return;
     }
     
-    op.completionBlock = ((CSSOperation *)op).userCompletionHandle;
     @synchronized(self.dependencyTable) {
         if ([self.dependencyTable containsObject:op]) {
             [self.dependencyTable removeObject:op];
@@ -170,6 +177,9 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
             }
         }
     }
+    [op removeObserver:self
+            forKeyPath:NSStringFromSelector(@selector(isFinished))
+               context:kCSSOperationFinishContext];
 }
 
 #pragma mark - Get
