@@ -30,6 +30,9 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
 
 #pragma mark - Template Method
 + (void)_asyncStartOperation:(__kindof NSOperation *)newOperation {
+    if (newOperation.isCancelled) {
+        return;
+    }
     // 检测newOperation是否已被处理
     if (![self _operationDidHandle:newOperation]) {
         NSOperationQueue *queue = [self _queueForOperation:newOperation];

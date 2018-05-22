@@ -77,10 +77,12 @@ NS_ASSUME_NONNULL_BEGIN
  - 为nil时。默认情况下会根据`operationType`创建全局队列，与APP的生命周期相同。
  - 一般情况下无需指定该属性，除非你想隔离操作。
  */
-@property (nonatomic, strong, nullable, readonly) NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *queues;
+@property (nonatomic, strong, readonly, nullable) NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *queues;
 
 
 @property (nonatomic, strong, readonly) NSOperationQueue *currentQueue;
+
+- (void)addDependency:(__kindof NSOperation *)op condition:(BOOL(^ _Nullable)(__kindof CSSOperation *maker))condition;
 
 @end
 NS_ASSUME_NONNULL_END

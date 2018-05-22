@@ -36,6 +36,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 @property (nonatomic, strong) NSHashTable<__kindof NSOperation *> *dependencyTable;
 @property (nonatomic, copy) dispatch_block_t userCompletionHandle;
+@property (nonatomic, copy) BOOL(^dependencyConditionBlock)(__kindof CSSOperation *);
 
 @end
 
@@ -69,17 +70,18 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return self;
 }
 
-#pragma mark - private
+#pragma mark - KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if (context == kCSSOperationFinishContext &&
         [keyPath isEqualToString:NSStringFromSelector(@selector(isFinished))] &&
         [object isKindOfClass:[self class]]) {
-        if ([change[NSKeyValueChangeNewKey] boolValue] && ![change[NSKeyValueChangeOldKey] boolValue]) {
+        if ([change[NSKeyValueChangeNewKey] boolValue]) {
             [self removeDependency:(NSOperation *)object];
         }
     }
 }
 
+#pragma mark - private
 + (NSOperationQueue *)_queueForOperation:(__kindof CSSOperation *)newOperation {
     
     CSSOperationType type = newOperation.operationType;
@@ -140,15 +142,60 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 - (void)cancel {
     [super cancel];
-    self.ready = YES;
     self.executing = NO;
     self.finished = YES;
 }
 
 - (void)addDependency:(__kindof NSOperation *)op {
+    [self addDependency:op condition:nil];
+}
+
+- (void)removeDependency:(__kindof NSOperation *)op {
+    if (!op) { return; }
+    
+    if (![op isKindOfClass:[self class]]) {
+        [super removeDependency:op];
+        return;
+    }
+    
+    CSSOperation *operation = (CSSOperation *)op;
+    @synchronized(self.dependencyTable) {
+        if ([self.dependencyTable containsObject:operation]) {
+            [self.dependencyTable removeObject:operation];
+        }
+        if (self.dependencyTable.count <= 0) {
+            if (!self.ready) {
+                if (operation.dependencyConditionBlock) {
+                    NSLog(@"--condition-->%ld", @(operation.dependencyConditionBlock(self)).integerValue);
+                    operation.dependencyConditionBlock(self) ? (self.ready = YES) : [self cancel];
+                    NSLog(@"--ready-->%@,%ld", @"dependencyConditionBlock", @(self.ready).integerValue);
+                    return;
+                }
+                self.ready = YES;
+            }
+        }
+    }
+    [operation removeObserver:self
+            forKeyPath:NSStringFromSelector(@selector(isFinished))
+               context:kCSSOperationFinishContext];
+}
+
+#pragma mark - ********************* public *********************
+- (void)addDependency:(__kindof NSOperation *)op condition:(BOOL(^ _Nullable)(__kindof CSSOperation *maker))condition {
+    if (!op) {
+        return;
+    }
+    if (op.isCancelled) {
+        return;
+    }
+    
     if (![op isKindOfClass:[self class]]) {
         [super addDependency:op];
         return;
+    }
+    
+    if (condition) {
+        ((CSSOperation *)op).dependencyConditionBlock = condition;
     }
     
     @synchronized(self.dependencyTable) {
@@ -159,27 +206,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
          forKeyPath:NSStringFromSelector(@selector(isFinished))
             options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew
             context:kCSSOperationFinishContext];
-}
-
-- (void)removeDependency:(__kindof NSOperation *)op {
-    if (![op isKindOfClass:[self class]]) {
-        [super removeDependency:op];
-        return;
-    }
-    
-    @synchronized(self.dependencyTable) {
-        if ([self.dependencyTable containsObject:op]) {
-            [self.dependencyTable removeObject:op];
-        }
-        if (self.dependencyTable.count <= 0) {
-            if (!self.ready) {
-                self.ready = YES;
-            }
-        }
-    }
-    [op removeObserver:self
-            forKeyPath:NSStringFromSelector(@selector(isFinished))
-               context:kCSSOperationFinishContext];
 }
 
 #pragma mark - Get
