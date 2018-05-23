@@ -90,14 +90,12 @@
 }
 
 - (void)testAddConditionDependency {
-    NSMutableArray<NSString *> *mArr = [NSMutableArray array];
+    NSMutableArray<NSNumber *> *mArr = [NSMutableArray array];
     NSInteger opCount = 99;
-    NSString *outsideFlag = @"outsideFlag";
-    NSString *insideFlag = @"insideFlag";
+    NSNumber *outsideFlag = @(99 + 1);
     CSSOperation *outOp = [CSSOperation new];
     outOp.name = @"out";
     outOp.blockOnCurrentThread = ^(__kindof CSSOperation *maker) {
-        NSLog(@"--o00000000000000000000000000000000000ut-->%@", @"");
         @synchronized(mArr) {
             [mArr addObject:outsideFlag];
         }
@@ -112,15 +110,13 @@
         CSSOperation *op = [CSSOperation new];
         op.name = [NSString stringWithFormat:@"%ld", i];
         op.blockOnCurrentThread = ^(__kindof CSSOperation *maker) {
-             NSLog(@"--i-->%ld", i);
             // [NSThread sleepForTimeInterval:0.01];
             @synchronized(mArr) {
-                [mArr addObject:insideFlag];
+                [mArr addObject:@(i)];
             };
             maker.finished = YES;
         };
         [ops addObject:op];
-        [op asyncStart];
     }
     
     [ops[50] addDependency:ops.lastObject condition:^BOOL(__kindof CSSOperation * _Nonnull maker) {
@@ -130,12 +126,19 @@
         return YES;
     }];
     [outOp addDependencyArray:ops.copy];
+    for (CSSOperation *o in ops) {
+        [o asyncStart];
+    }
     [outOp asyncStart];
     
     CSS_WAIT
-     NSLog(@"--mArr count-->%ld", mArr.count);
-    XCTAssertTrue(mArr.count == opCount + 1 - 1);
-    XCTAssertTrue([mArr.lastObject isEqualToString:outsideFlag]);
+    NSInteger resultCount = opCount + 1 - 1;
+    XCTAssertTrue(mArr.count == resultCount);
+    for (NSNumber *num in mArr) {
+        XCTAssertTrue(num.integerValue != 50);
+    }
+    XCTAssertTrue(mArr[resultCount - 2].integerValue == 30);
+    XCTAssertTrue(mArr.lastObject == outsideFlag);
 }
 
 - (void)testOperationCancelBeforeDependecy {
@@ -187,6 +190,7 @@
     NSNumber *outsideFlag = @(-11111);
     CSSOperation *outOp = [CSSOperation new];
     outOp.blockOnCurrentThread = ^(__kindof CSSOperation *maker) {
+        
         @synchronized(mArr) {
             [mArr addObject:outsideFlag];
         }
@@ -213,7 +217,6 @@
     [outOp asyncStart];
     
     CSS_WAIT
-    NSLog(@"--mArr count-->%ld", mArr.count);
     XCTAssertTrue(mArr.count == opCount + 1 - cancelCount);
     for (NSNumber *num in mArr) {
         if (num != outsideFlag) {

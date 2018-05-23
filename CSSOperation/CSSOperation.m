@@ -76,7 +76,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         [keyPath isEqualToString:NSStringFromSelector(@selector(isFinished))] &&
         [op isKindOfClass:[self class]]) {
         if ([change[NSKeyValueChangeNewKey] boolValue]) {
-            NSLog(@"--KVO-->%@", @"KVO");
             [self removeDependency:op];
         }
     }
@@ -143,7 +142,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 - (void)cancel {
     [super cancel];
-    NSLog(@"--cancel-->%ld", @([self.currentQueue.operations containsObject:self]).integerValue);
     if ([self.currentQueue.operations containsObject:self]) {
         self.ready = YES;
         return;
@@ -174,21 +172,12 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         }
         if (self.dependencyTable.count <= 0) {
             if (!self.ready) {
-                NSLog(@"--condition-->%@,%@,count:%@, self:%@", operation.name, operation.dependencyConditionBlock, self.currentQueue.operations, self);
                 if (operation.dependencyConditionBlock) {
                     if (operation.dependencyConditionBlock(operation)) {
                         self.ready = YES;
                         return;
                     }
-                    NSLog(@"---->self name:%@,cancel:%ld, op:%@", self.name, @(self.isCancelled).integerValue, operation.name);
-//                    self.isCancelled ? (self.ready = YES) : [self cancel];
-                    if (self.isCancelled) {
-                        self.ready = YES;
-                    } else {
-                        [self cancel];
-                    }
-                    
-                    NSLog(@"--ready-->%@,%ld", @"dependencyConditionBlock", @(self.ready).integerValue);
+                    self.isCancelled ? (self.ready = YES) : [self cancel];
                     return;
                 }
                 self.ready = YES;
