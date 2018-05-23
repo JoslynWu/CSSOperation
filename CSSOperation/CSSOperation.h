@@ -79,9 +79,20 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, readonly, nullable) NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *queues;
 
-
+/** 当前的队列 */
 @property (nonatomic, strong, readonly) NSOperationQueue *currentQueue;
 
+/**
+ 添加单条条件依赖
+ 
+ - 单条：表示前置条件只能有一条。
+ - condition为`nil`时同`- (void)removeDependency:`
+ - condition返回`YES`时依赖成立，通默认依赖。
+ - condition返回`NO`时, 本操作（self）被取消。
+
+ @param op 依赖的Operation
+ @param condition 依赖的条件
+ */
 - (void)addDependency:(__kindof NSOperation *)op condition:(BOOL(^ _Nullable)(__kindof CSSOperation *maker))condition;
 
 @end

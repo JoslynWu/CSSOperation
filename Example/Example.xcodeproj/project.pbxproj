@@ -8,9 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		9E3B27C4209C32E5005B3102 /* ExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B27C3209C32E5005B3102 /* ExampleUITests.m */; };
+		9E5675DA20B5AC90002AEFE9 /* CSSConditionDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */; };
+		9E5675DC20B5ACD7002AEFE9 /* CSSCancelOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */; };
+		9E5675DE20B5AD1F002AEFE9 /* CSSRemoveDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */; };
+		9E5675E020B5AD51002AEFE9 /* CSSAddDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */; };
 		9E5DEA5C20B01ED900D31B78 /* CSSSingletonViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DEA5B20B01ED900D31B78 /* CSSSingletonViewController.m */; };
 		9E5DEA5F20B01EEC00D31B78 /* CSSConcurrentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DEA5E20B01EEC00D31B78 /* CSSConcurrentViewController.m */; };
-		9E5DEA6720B0539400D31B78 /* ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DEA6620B0539400D31B78 /* ExampleTests.m */; };
+		9E5DEA6720B0539400D31B78 /* CSSBlockOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5DEA6620B0539400D31B78 /* CSSBlockOperation.m */; };
 		9E6C33AC20946A8700D169BB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E6C33AB20946A8700D169BB /* AppDelegate.m */; };
 		9E6C33B420946A8A00D169BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E6C33B320946A8A00D169BB /* Assets.xcassets */; };
 		9E6C33B720946A8A00D169BB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9E6C33B520946A8A00D169BB /* LaunchScreen.storyboard */; };
@@ -46,12 +50,16 @@
 		9E3B27C1209C32E5005B3102 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E3B27C3209C32E5005B3102 /* ExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleUITests.m; sourceTree = "<group>"; };
 		9E3B27C5209C32E5005B3102 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSConditionDependency.m; sourceTree = "<group>"; };
+		9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSCancelOperation.m; sourceTree = "<group>"; };
+		9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSRemoveDependency.m; sourceTree = "<group>"; };
+		9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSAddDependency.m; sourceTree = "<group>"; };
 		9E5DEA5A20B01ED900D31B78 /* CSSSingletonViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSSingletonViewController.h; sourceTree = "<group>"; };
 		9E5DEA5B20B01ED900D31B78 /* CSSSingletonViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSSingletonViewController.m; sourceTree = "<group>"; };
 		9E5DEA5D20B01EEC00D31B78 /* CSSConcurrentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSSConcurrentViewController.h; sourceTree = "<group>"; };
 		9E5DEA5E20B01EEC00D31B78 /* CSSConcurrentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSConcurrentViewController.m; sourceTree = "<group>"; };
 		9E5DEA6420B0539400D31B78 /* ExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		9E5DEA6620B0539400D31B78 /* ExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleTests.m; sourceTree = "<group>"; };
+		9E5DEA6620B0539400D31B78 /* CSSBlockOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSBlockOperation.m; sourceTree = "<group>"; };
 		9E5DEA6820B0539400D31B78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E5DEA6E20B0547F00D31B78 /* CSSUnitTestDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CSSUnitTestDefine.h; sourceTree = "<group>"; };
 		9E6C33A720946A8700D169BB /* Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -112,9 +120,13 @@
 		9E5DEA6520B0539400D31B78 /* ExampleTests */ = {
 			isa = PBXGroup;
 			children = (
-				9E5DEA6E20B0547F00D31B78 /* CSSUnitTestDefine.h */,
-				9E5DEA6620B0539400D31B78 /* ExampleTests.m */,
 				9E5DEA6820B0539400D31B78 /* Info.plist */,
+				9E5DEA6E20B0547F00D31B78 /* CSSUnitTestDefine.h */,
+				9E5DEA6620B0539400D31B78 /* CSSBlockOperation.m */,
+				9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */,
+				9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */,
+				9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */,
+				9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */,
 			);
 			path = ExampleTests;
 			sourceTree = "<group>";
@@ -319,7 +331,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E5DEA6720B0539400D31B78 /* ExampleTests.m in Sources */,
+				9E5675DA20B5AC90002AEFE9 /* CSSConditionDependency.m in Sources */,
+				9E5675DC20B5ACD7002AEFE9 /* CSSCancelOperation.m in Sources */,
+				9E5675E020B5AD51002AEFE9 /* CSSAddDependency.m in Sources */,
+				9E5675DE20B5AD1F002AEFE9 /* CSSRemoveDependency.m in Sources */,
+				9E5DEA6720B0539400D31B78 /* CSSBlockOperation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
