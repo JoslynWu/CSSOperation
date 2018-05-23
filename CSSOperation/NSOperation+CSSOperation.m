@@ -112,7 +112,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     }
 }
 
-+ (void)syncStartOperationArray:(NSArray<__kindof NSOperation *> *)operations {
++ (void)syncStartArray:(NSArray<__kindof NSOperation *> *)operations {
     [operations enumerateObjectsUsingBlock:^(__kindof NSOperation * _Nonnull operation, NSUInteger idx, BOOL * _Nonnull stop) {
         [operation syncStart];
     }];
@@ -143,7 +143,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     }
 }
 
-+ (void)asyncStartOperationArray:(NSArray<__kindof NSOperation *> *)operations {
++ (void)asyncStartArray:(NSArray<__kindof NSOperation *> *)operations {
     [operations enumerateObjectsUsingBlock:^(__kindof NSOperation * _Nonnull operation, NSUInteger idx, BOOL * _Nonnull stop) {
         [operation asyncStart];
     }];

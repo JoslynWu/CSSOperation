@@ -18,7 +18,7 @@
 
 /**
  异步执行
- - 如果前一个操作在未完成，那么新操作将被加入队列。执行方式由队列的类型决定（operationType）
+ - 如果前一个操作在未完成，那么新操作将被加入队列。执行方式由队列的类型决定（type）
  */
 - (void)asyncStart;
 
@@ -40,15 +40,15 @@
  - 不加入队列，直接执行
  */
 + (void)syncStartOperations:(__kindof NSOperation *)newOperation, ...;
-+ (void)syncStartOperationArray:(NSArray<__kindof NSOperation *> *)operations;
++ (void)syncStartArray:(NSArray<__kindof NSOperation *> *)operations;
 
 /**
  异步执行Operation
- - 队列类型由操作具体指定（CSSOperation的operationType）
+ - 队列类型由操作具体指定（CSSOperation的type）
  - 队列创建后全局可用
  */
 + (void)asyncStartOperations:(__kindof NSOperation *)newOperation, ...;
-+ (void)asyncStartOperationArray:(NSArray<__kindof NSOperation *> *)operations;
++ (void)asyncStartArray:(NSArray<__kindof NSOperation *> *)operations;
 
 @end
 

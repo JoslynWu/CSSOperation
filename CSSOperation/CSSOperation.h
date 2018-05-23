@@ -26,14 +26,14 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  指定构造器
  
- - 默认构造器(-init)的`operationType`默认为`kCSSOperationTypeConcurrent, queues为nil`
+ - 默认构造器(-init)的`type`默认为`kCSSOperationTypeConcurrent, queues为nil`
 
  @param type 操作类型
  @param queues 自定义队列。传nil则使用全局队列（非系统的全局队列）
  @return 操作实例
  */
-- (instancetype)initWithOperationType:(CSSOperationType)type
-                                queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues NS_DESIGNATED_INITIALIZER;
+- (instancetype)initWithType:(CSSOperationType)type
+                       queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues NS_DESIGNATED_INITIALIZER;
 
 /** 便捷构造器 */
 + (instancetype)operationWithType:(CSSOperationType)type
@@ -69,12 +69,12 @@ NS_ASSUME_NONNULL_BEGIN
  - kCSSOperationTypeSerial 串行队列
  - kCSSOperationTypeConcurrent 并发队列
  */
-@property (nonatomic, copy, readonly) CSSOperationType operationType;
+@property (nonatomic, copy, readonly) CSSOperationType type;
 
 /**
  自定义的操作队列
- - 根据`operationType`进入对应的队列
- - 为nil时。默认情况下会根据`operationType`创建全局队列，与APP的生命周期相同。
+ - 根据`type`进入对应的队列
+ - 为nil时。默认情况下会根据`type`创建全局队列，与APP的生命周期相同。
  - 一般情况下无需指定该属性，除非你想隔离操作。
  */
 @property (nonatomic, strong, readonly, nullable) NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *queues;

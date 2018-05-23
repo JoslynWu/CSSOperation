@@ -48,35 +48,36 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 #pragma mark - lifecycle
 - (instancetype)init {
-    return [self initWithOperationType:kCSSOperationTypeConcurrent queue:nil];
+    return [self initWithType:kCSSOperationTypeConcurrent queue:nil];
 }
 
 + (instancetype)operationWithType:(CSSOperationType)type {
-    return [[self alloc] initWithOperationType:type queue:nil];
+    return [[self alloc] initWithType:type queue:nil];
 }
 
 + (instancetype)operationWithType:(CSSOperationType)type
                             queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
-    return [[self alloc] initWithOperationType:type queue:queues];
+    return [[self alloc] initWithType:type queue:queues];
 }
 
-- (instancetype)initWithOperationType:(CSSOperationType)type queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
+- (instancetype)initWithType:(CSSOperationType)type queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
     self = [super init];
     if (!self) {
         return nil;
     }
-    _operationType = type;
+    _type = type;
     _queues = queues;
     return self;
 }
 
 #pragma mark - KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(NSOperation *)op change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if (context == kCSSOperationFinishContext &&
         [keyPath isEqualToString:NSStringFromSelector(@selector(isFinished))] &&
-        [object isKindOfClass:[self class]]) {
+        [op isKindOfClass:[self class]]) {
         if ([change[NSKeyValueChangeNewKey] boolValue]) {
-            [self removeDependency:(NSOperation *)object];
+            NSLog(@"--KVO-->%@", @"KVO");
+            [self removeDependency:op];
         }
     }
 }
@@ -84,7 +85,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 #pragma mark - private
 + (NSOperationQueue *)_queueForOperation:(__kindof CSSOperation *)newOperation {
     
-    CSSOperationType type = newOperation.operationType;
+    CSSOperationType type = newOperation.type;
     if (type.length <= 0) {
         return nil;
     }
@@ -142,6 +143,11 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 - (void)cancel {
     [super cancel];
+    NSLog(@"--cancel-->%ld", @([self.currentQueue.operations containsObject:self]).integerValue);
+    if ([self.currentQueue.operations containsObject:self]) {
+        self.ready = YES;
+        return;
+    }
     self.executing = NO;
     self.finished = YES;
 }
@@ -162,12 +168,26 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     @synchronized(self.dependencyTable) {
         if ([self.dependencyTable containsObject:operation]) {
             [self.dependencyTable removeObject:operation];
+            [operation removeObserver:self
+                           forKeyPath:NSStringFromSelector(@selector(isFinished))
+                              context:kCSSOperationFinishContext];
         }
         if (self.dependencyTable.count <= 0) {
             if (!self.ready) {
+                NSLog(@"--condition-->%@,%@,count:%@, self:%@", operation.name, operation.dependencyConditionBlock, self.currentQueue.operations, self);
                 if (operation.dependencyConditionBlock) {
-                    NSLog(@"--condition-->%ld", @(operation.dependencyConditionBlock(self)).integerValue);
-                    operation.dependencyConditionBlock(self) ? (self.ready = YES) : [self cancel];
+                    if (operation.dependencyConditionBlock(operation)) {
+                        self.ready = YES;
+                        return;
+                    }
+                    NSLog(@"---->self name:%@,cancel:%ld, op:%@", self.name, @(self.isCancelled).integerValue, operation.name);
+//                    self.isCancelled ? (self.ready = YES) : [self cancel];
+                    if (self.isCancelled) {
+                        self.ready = YES;
+                    } else {
+                        [self cancel];
+                    }
+                    
                     NSLog(@"--ready-->%@,%ld", @"dependencyConditionBlock", @(self.ready).integerValue);
                     return;
                 }
@@ -175,9 +195,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
             }
         }
     }
-    [operation removeObserver:self
-            forKeyPath:NSStringFromSelector(@selector(isFinished))
-               context:kCSSOperationFinishContext];
 }
 
 #pragma mark - ********************* public *********************
@@ -201,11 +218,11 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     @synchronized(self.dependencyTable) {
         self.ready = NO;
         [self.dependencyTable addObject:op];
+        [op addObserver:self
+             forKeyPath:NSStringFromSelector(@selector(isFinished))
+                options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew
+                context:kCSSOperationFinishContext];
     }
-    [op addObserver:self
-         forKeyPath:NSStringFromSelector(@selector(isFinished))
-            options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew
-            context:kCSSOperationFinishContext];
 }
 
 #pragma mark - Get
@@ -237,7 +254,7 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
 
 #pragma mark - ********************* public *********************
 - (__kindof NSOperationQueue *)currentQueue {
-    CSSOperationType type = self.operationType;
+    CSSOperationType type = self.type;
     
     if (self.queues.count && [self.queues.allKeys containsObject:type] &&
         [self.queues[type] isKindOfClass:[NSOperationQueue class]]){
