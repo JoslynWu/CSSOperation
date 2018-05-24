@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		9E3B27C4209C32E5005B3102 /* ExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E3B27C3209C32E5005B3102 /* ExampleUITests.m */; };
-		9E5675DA20B5AC90002AEFE9 /* CSSConditionDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */; };
 		9E5675DC20B5ACD7002AEFE9 /* CSSCancelOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */; };
 		9E5675DE20B5AD1F002AEFE9 /* CSSRemoveDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */; };
 		9E5675E020B5AD51002AEFE9 /* CSSAddDependency.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */; };
@@ -50,7 +49,6 @@
 		9E3B27C1209C32E5005B3102 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E3B27C3209C32E5005B3102 /* ExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleUITests.m; sourceTree = "<group>"; };
 		9E3B27C5209C32E5005B3102 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSConditionDependency.m; sourceTree = "<group>"; };
 		9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSCancelOperation.m; sourceTree = "<group>"; };
 		9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSRemoveDependency.m; sourceTree = "<group>"; };
 		9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSSAddDependency.m; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 				9E5675DF20B5AD51002AEFE9 /* CSSAddDependency.m */,
 				9E5675DB20B5ACD7002AEFE9 /* CSSCancelOperation.m */,
 				9E5675DD20B5AD1F002AEFE9 /* CSSRemoveDependency.m */,
-				9E5675D920B5AC90002AEFE9 /* CSSConditionDependency.m */,
 			);
 			path = ExampleTests;
 			sourceTree = "<group>";
@@ -331,7 +328,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E5675DA20B5AC90002AEFE9 /* CSSConditionDependency.m in Sources */,
 				9E5675DC20B5ACD7002AEFE9 /* CSSCancelOperation.m in Sources */,
 				9E5675E020B5AD51002AEFE9 /* CSSAddDependency.m in Sources */,
 				9E5675DE20B5AD1F002AEFE9 /* CSSRemoveDependency.m in Sources */,
