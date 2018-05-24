@@ -60,7 +60,8 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return [[self alloc] initWithType:type queue:queues];
 }
 
-- (instancetype)initWithType:(CSSOperationType)type queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
+- (instancetype)initWithType:(CSSOperationType)type
+                       queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
     self = [super init];
     if (!self) {
         return nil;
@@ -103,7 +104,9 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         }
         
     } else if (type == kCSSOperationTypeSerial) {
-        [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
+        [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse
+                                           usingBlock:
+         ^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([op isMemberOfClass:self]) {
                 [newOperation addDependency:op];
                 *stop = YES;

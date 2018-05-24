@@ -33,7 +33,7 @@ static dispatch_queue_t _CSSOperationDispatchManagerSerialQueue(void) {
     if (newOperation.isCancelled) {
         return;
     }
-    // 检测newOperation是否已被处理
+
     if (![self _operationDidHandle:newOperation]) {
         NSOperationQueue *queue = [self _queueForOperation:newOperation];
         queue ? [queue addOperation:newOperation] : [newOperation cancel];
