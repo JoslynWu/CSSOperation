@@ -12,8 +12,6 @@ CSSOperationType const kCSSOperationTypeSingleton = @"CSSOperationTypeSingleton"
 CSSOperationType const kCSSOperationTypeSerial = @"CSSOperationTypeSerial";
 CSSOperationType const kCSSOperationTypeConcurrent = @"CSSOperationTypeConcurrent";
 
-static void *kCSSOperationFinishContext = &kCSSOperationFinishContext;
-
 static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) {
     static NSMutableDictionary *globalQueues = nil;
     static dispatch_once_t onceToken;
@@ -51,7 +49,8 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     return [[self alloc] initWithType:type queue:queues];
 }
 
-- (instancetype)initWithType:(CSSOperationType)type queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
+- (instancetype)initWithType:(CSSOperationType)type
+                       queue:(nullable NSDictionary<CSSOperationType, __kindof NSOperationQueue *> *)queues {
     self = [super init];
     if (!self) {
         return nil;
@@ -59,17 +58,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     _type = type;
     _queues = queues;
     return self;
-}
-
-#pragma mark - KVO
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(NSOperation *)op change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if (context == kCSSOperationFinishContext &&
-        [keyPath isEqualToString:NSStringFromSelector(@selector(isFinished))] &&
-        [op isKindOfClass:[self class]]) {
-        if ([change[NSKeyValueChangeNewKey] boolValue]) {
-            [self removeDependency:op];
-        }
-    }
 }
 
 #pragma mark - private
@@ -91,7 +79,8 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
         
     } else if (type == kCSSOperationTypeSerial) {
         [queue.operations enumerateObjectsWithOptions:NSEnumerationReverse
-                                           usingBlock:^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
+                                           usingBlock:
+         ^(__kindof NSOperation *op, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([op isMemberOfClass:self]) {
                 [newOperation addDependency:op];
                 *stop = YES;
