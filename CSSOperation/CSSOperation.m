@@ -118,18 +118,6 @@ static NSOperationQueue *_CSSOperationManagerGlobalQueue(CSSOperationType type) 
     self.finished = YES;
 }
 
-- (void)addDependency:(NSOperation *)op {
-    [super addDependency:op];
-    
-    !self.addDependencyComplete ?: self.addDependencyComplete(self);
-}
-
-- (void)removeDependency:(NSOperation *)op {
-    [super removeDependency:op];
-    
-    !self.removeDependencyComplete ?: self.removeDependencyComplete(self);
-}
-
 #pragma mark - Set
 - (void)setFinished:(BOOL)finished {
     [self willChangeValueForKey:NSStringFromSelector(@selector(isFinished))];

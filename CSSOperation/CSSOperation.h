@@ -79,12 +79,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 当前的队列 */
 @property (nonatomic, strong, readonly) NSOperationQueue *currentQueue;
 
-/** 移除依赖后的操作 */
-@property (nonatomic, copy, nullable) CSSOperationBlock removeDependencyComplete;
-
-/** 添加依赖后的操作 */
-@property (nonatomic, copy, nullable) CSSOperationBlock addDependencyComplete;
-
 @end
 NS_ASSUME_NONNULL_END
 
