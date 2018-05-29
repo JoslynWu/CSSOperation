@@ -45,10 +45,6 @@
             }]];
             [weakSelf.navigationController presentViewController:alertCtl animated:YES completion:nil];
         };
-        operation.completionBlock = ^{
-            NSLog(@"--alert-->%@", @"completionBlock");
-        };
-        NSLog(@"--alert-->%@,%@", operation, operation.completionBlock);
         [operation asyncStart];
     }
 }
