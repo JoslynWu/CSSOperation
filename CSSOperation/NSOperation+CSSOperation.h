@@ -26,7 +26,7 @@
  当前操作依赖其它操作.
  - 需要在start之前添加依赖
  */
-- (void)addDependencyOperations:(__kindof NSOperation *)newOperation, ...;
+- (void)addDependencyOperations:(__kindof NSOperation *)newOperation, ... NS_REQUIRES_NIL_TERMINATION;
 - (void)addDependencyArray:(NSArray<__kindof NSOperation *> *)operations;
 
 @end
@@ -39,7 +39,7 @@
  立即执行Operation
  - 不加入队列，直接执行
  */
-+ (void)syncStartOperations:(__kindof NSOperation *)newOperation, ...;
++ (void)syncStartOperations:(__kindof NSOperation *)newOperation, ... NS_REQUIRES_NIL_TERMINATION;
 + (void)syncStartArray:(NSArray<__kindof NSOperation *> *)operations;
 
 /**
@@ -47,7 +47,7 @@
  - 队列类型由操作具体指定（CSSOperation的type）
  - 队列创建后全局可用
  */
-+ (void)asyncStartOperations:(__kindof NSOperation *)newOperation, ...;
++ (void)asyncStartOperations:(__kindof NSOperation *)newOperation, ... NS_REQUIRES_NIL_TERMINATION;
 + (void)asyncStartArray:(NSArray<__kindof NSOperation *> *)operations;
 
 @end
